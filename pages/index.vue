@@ -79,11 +79,10 @@ export default {
 }
 
 .mobile-nav {
-  position: absolute;
-  bottom: 50px;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-top: 100px;
   display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .but {
