@@ -1,7 +1,9 @@
+/* eslint-disable vue/no-parsing-error */ /* eslint-disable vue/no-parsing-error
+*/
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-3 left-info">
+      <div class="col-md-3 col-sm-12 left-info">
         <div class="center">
           <div class="logo">
             <img src="/logo.png" alt="">
@@ -14,13 +16,22 @@
           </h2>
         </div>
       </div>
-      <div class="col-8 form">
+      <div class="col-md-8 col-sm-12 form">
         <h1>Заполните данные</h1>
-        <div class="form-box">
-          <input placeholder="ФИО" type="text">
-          <input placeholder="Телефон" type="text">
-          <input placeholder="Почта" type="text">
-          <input placeholder="Адресс доставки" type="text">
+        <div class="row form-box">
+          <div class="col-lg-6 col-md-12">
+            <input placeholder="ФИО" type="text">
+            <input placeholder="Почта" type="text">
+          </div>
+          <div class="col-lg-6 col-md-12">
+            <input
+              v-model="info.phone"
+              v-mask="'+# (###) ##-##-##'"
+              placeholder="Телефон"
+              type="text"
+            >
+            <input placeholder="Адресс доставки" type="text">
+          </div>
         </div>
         <div class="check-box">
           <input id="c1" type="checkbox">
@@ -29,12 +40,13 @@
           </label>
         </div>
         <div class="row select-box">
-          <div class="col-6">
+          <div class="col-xl-6 col-md-12 col-lg-12">
             <h1>Вода</h1>
             <div class="inner-box">
               <div class="barel">
                 <div class="main" @click="changeBarel(0)">
                   <img src="/path.png" class="bg-barel" alt="">
+                  <img src="/barel.png" class="img-barel" alt="">
                   <div class="circle active" />
                   <h1>18,9 л</h1>
                   <h3>1 шт</h3>
@@ -50,6 +62,7 @@
               <div class="barel">
                 <div class="main" @click="changeBarel(1)">
                   <img src="/path.png" class="bg-barel" alt="">
+                  <img src="/bottle.png" class="img-barel" alt="">
                   <div class="circle" />
                   <h1>1,5 л</h1>
                   <h3>6 шт</h3>
@@ -65,6 +78,7 @@
               <div class="barel">
                 <div class="main" @click="changeBarel(2)">
                   <img src="/path.png" class="bg-barel" alt="">
+                  <img src="/bottle.png" class="img-barel" alt="">
                   <div class="circle" />
                   <h1>0,5 л</h1>
                   <h3>12 шт</h3>
@@ -78,7 +92,7 @@
               </div>
             </div>
           </div>
-          <div class="col-6 date">
+          <div class="col-xl-6 date col-md-12 col-lg-12">
             <h1>Дата и время доставки</h1>
             <div class="inner-date">
               <h2>ДЕНЬ</h2>
@@ -157,6 +171,11 @@
 </template>
 
 <script>
+import Vue from 'vue'
+
+import { VueMaskDirective } from 'v-mask'
+Vue.directive('mask', VueMaskDirective)
+
 const daysOfTheWeek = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ']
 
 export default {
@@ -168,7 +187,8 @@ export default {
         date: [],
         selected: {},
         offset: 0,
-        summa: 220
+        summa: 220,
+        phone: ''
       }
     }
   },
@@ -188,9 +208,15 @@ export default {
       all[id].classList.add('active')
       colvo[id].classList.add('active')
       this.info.barel = id
-      if (id === 0) { this.info.summa = 220 }
-      if (id === 1) { this.info.summa = 175 }
-      if (id === 2) { this.info.summa = 270 }
+      if (id === 0) {
+        this.info.summa = 220
+      }
+      if (id === 1) {
+        this.info.summa = 175
+      }
+      if (id === 2) {
+        this.info.summa = 270
+      }
     },
     changeTime (id) {
       const all = document.querySelectorAll('.time')
@@ -291,10 +317,10 @@ export default {
 
 .form {
   width: 100%;
-  height: 94vh;
   background: #f5f8ff;
   border-radius: 6px;
   margin-top: 30px;
+  margin-bottom: 30px;
   padding: 40px;
 }
 
@@ -307,11 +333,10 @@ export default {
 }
 
 .form-box {
-  display: grid;
-  grid-template-columns: 50% 50%;
 }
 
 .form-box input {
+  width: 100%;
   margin-right: 80px;
   margin-bottom: 30px;
   background: transparent;
@@ -359,7 +384,7 @@ export default {
 .main {
   cursor: pointer;
   position: relative;
-  width: 120px;
+  width: 110px;
   height: 160px;
   border-radius: 8px;
   z-index: 1;
@@ -381,6 +406,7 @@ export default {
   margin-top: 60px;
   font-size: 16px;
   color: white;
+  font-weight: 500;
 }
 
 .circle {
@@ -400,6 +426,16 @@ export default {
 
 .bg-barel {
   left: 0;
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+  z-index: -1;
+}
+
+img.img-barel {
+  /* height: 80px; */
+  width: 45px !important;
+  right: 0px;
   bottom: 0;
   position: absolute;
   width: 100%;
@@ -502,9 +538,9 @@ h2.active {
 }
 
 .time {
-  font-size: 20px;
+  font-size: 18px;
   color: #455273;
-  padding: 10px 30px;
+  padding: 10px 20px;
   background: #e5edff;
   font-weight: 700;
   border-radius: 30px;
@@ -543,7 +579,7 @@ h2.active {
 .button {
   padding: 10px 40px;
   color: white;
-  background: #418DE8;
+  background: #418de8;
   font-size: 20px;
   border-radius: 30px;
   cursor: pointer;
