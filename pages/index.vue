@@ -67,7 +67,7 @@ export default {
     margin-top: 60px;
   }
   .button {
-    display: block;
+    display: block !important;
   }
 }
 
