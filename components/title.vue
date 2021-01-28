@@ -25,7 +25,7 @@ export default {
 <style>
 .left-info {
   width: 100%;
-  height: 100vh;
+  height: 100vh !important;
   display: flex;
   justify-content: center;
   align-items: center;
