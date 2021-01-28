@@ -69,6 +69,9 @@ export default {
   .button {
     display: block !important;
   }
+  .left-info {
+      margin: 0 !important;
+  }
 }
 
 .mobile {
