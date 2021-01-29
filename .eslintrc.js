@@ -14,5 +14,9 @@ module.exports = {
   plugins: [
   ],
   // add your custom rules here
-  rules: {}
+  rules: {
+    'space-before-blocks': 'off',
+    'no-extra-semi': 'off',
+    'curly': 'off'
+  }
 }

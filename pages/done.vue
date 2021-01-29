@@ -9,37 +9,35 @@
         </div>
         <div class="done-info">
           <div class="done-line line">
-            <h1>Бутьль 18,9 л</h1>
+            <h1>Бутыль {{ barel }}</h1>
             <h2>1 шт</h2>
           </div>
           <div class="done-line line">
             <h1>12 февраля</h1>
-            <h2>10:00 - 11:00</h2>
+            <h2>{{ time }}</h2>
           </div>
           <div class="done-line line">
             <h1>Адрес доставки</h1>
-            <h2>г. Самара, ул. Спортивная 24, офис 305</h2>
+            <h2>{{ adress }}</h2>
           </div>
           <div class="done-line">
             <h1>Телефон</h1>
-            <h2>+7 (905) 606-40-04</h2>
+            <h2>{{ phone }}</h2>
           </div>
         </div>
-        <div class="row">
-          <div class="itogo">
-            <h1>Итого</h1>
-            <h1>220,<span>00 ₽</span></h1>
-          </div>
-          <div class="text-done">
-            <h2>
-              Ваш заказ <a href="#">№221</a> успешно оформлен. В ближайшее время
-              по указанному телефону с Вами свяжется наш менеджер.
-            </h2>
-          </div>
-          <Nuxt-link to="/" class="button">
-            <a>Новый заказ</a>
-          </Nuxt-link>
+        <div class="itogo">
+          <h1>Итого</h1>
+          <h1>{{ summa }},<span>00 ₽</span></h1>
         </div>
+        <div class="text-done">
+          <h2>
+            Ваш заказ <a href="#">№221</a> успешно оформлен. В ближайшее время
+            по указанному телефону с Вами свяжется наш менеджер.
+          </h2>
+        </div>
+        <Nuxt-link to="/" class="button">
+          <a>Новый заказ</a>
+        </Nuxt-link>
       </div>
     </div>
   </div>
@@ -58,13 +56,25 @@ export default {
       Date,
       currentStep: 0,
       curTest: ['Заказать воду', 'Далее', 'Заказать воду'],
-      steps: [Title, Userinfo, Dates]
+      steps: [Title, Userinfo, Dates],
+      summa: 220,
+      barel: '18,9 л',
+      time: '10:00 - 11:00',
+      adress: '',
+      phone: '',
+      fio: '',
+      email: ''
     }
   },
-  computed: {
-    currentComponent () {
-      return this.steps[this.currentStep]
-    }
+  mounted () {
+    const info = JSON.parse(localStorage.getItem('form'))
+    this.summa = info.summa
+    this.barel = info.barel
+    this.time = info.time
+    this.adress = info.['Адресс доставки']
+    this.phone = info.['Телефон']
+    this.fio = info.['ФИО']
+    this.email = info.['Почта']
   }
 }
 </script>
@@ -75,24 +85,8 @@ a:hover {
   outline: none;
 }
 
-.done-info {
-  display: flex;
-  padding: 20px;
-  justify-content: center;
-  flex-direction: column;
-  background: white;
-  border-radius: 8px;
-  margin: 10px;
-  margin-top: 40px;
-}
-
 .text-done {
-  margin: 20px;
-}
-
-.text-done h2 {
-  font-size: 22px;
-  display: block;
+  margin: 10px 0px;
 }
 
 .done-line {
@@ -105,16 +99,6 @@ a:hover {
 
 .line {
   border-bottom: 1px dashed #d5dde0;
-}
-
-.done-line h1 {
-  margin: 0;
-  font-size: 24px;
-}
-
-.done-line h2 {
-  color: #babdc2;
-  font-size: 20px;
 }
 
 .done {
@@ -140,7 +124,6 @@ a:hover {
   border-top: none;
   border-bottom: 1px solid #d5dde0;
   margin-top: 30px;
-  margin-left: 20px;
 }
 
 .itogo h1 {
@@ -153,18 +136,6 @@ a:hover {
 
 .itogo > h1 > span {
   color: #babdc2;
-}
-
-.button {
-  padding: 10px 40px;
-  color: white;
-  background: #418de8;
-  font-size: 20px;
-  border-radius: 30px;
-  cursor: pointer;
-  margin-top: 60px;
-  margin-left: 20px;
-  display: none;
 }
 
 @media (min-width: 320px) {
@@ -183,15 +154,51 @@ a:hover {
   .left-info {
     margin: 0 !important;
   }
-  .itogo {
-    margin-left: 20px;
-  }
 
   .left-info {
     display: none;
     margin-top: 100px;
     height: 100%;
     align-items: center;
+  }
+
+  .done-info {
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+    flex-direction: column;
+    background: white;
+    border-radius: 8px;
+    margin: 0px;
+    margin-top: 20px;
+  }
+
+  .done-line h1 {
+    margin: 0;
+    font-size: 16px;
+  }
+
+  .done-line h2 {
+    color: #babdc2;
+    font-size: 12px;
+  }
+
+  .button {
+    padding: 10px 40px;
+    color: white;
+    background: #418de8;
+    font-size: 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    margin: 20px auto;
+    display: none;
+  }
+
+  .text-done h2 {
+    margin: 30px 0;
+    font-size: 18px;
+    display: block;
+    text-align: center;
   }
 }
 
@@ -212,6 +219,44 @@ a:hover {
   .form {
     margin-top: 30px;
     margin-bottom: 30px;
+  }
+
+  .done-info {
+    display: flex;
+    padding: 20px;
+    justify-content: center;
+    flex-direction: column;
+    background: white;
+    border-radius: 8px;
+    margin: 10px;
+    margin-top: 40px;
+  }
+
+  .done-line h1 {
+    margin: 0;
+    font-size: 24px;
+  }
+
+  .done-line h2 {
+    color: #babdc2;
+    font-size: 20px;
+  }
+
+  .button {
+    padding: 10px 40px;
+    color: white;
+    background: #418de8;
+    font-size: 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    margin-top: 60px;
+    display: none;
+  }
+
+  .text-done h2 {
+    font-size: 22px;
+    display: block;
+    text-align: left;
   }
 }
 </style>

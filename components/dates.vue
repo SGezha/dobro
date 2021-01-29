@@ -76,7 +76,7 @@
               @click="changeDate(ind)"
             >
               <h1 :class="{ active: d.active }" v-text="d.data.day" />
-              <h2
+              <h3
                 :class="{ active: d.active, vihodnoi: d.vihodnoi }"
                 v-text="d.data.daysOfTheWeek"
               />
@@ -95,36 +95,34 @@
 
           <h2>ВРЕМЯ</h2>
           <div v-if="!info.selected.vihodnoi" class="time-box">
-            <div class="time active" @click="changeTime(0)">
+            <div class="time active" @click="changeTime(0, '10:00 - 11:00')">
               10:00 - 11:00
             </div>
-            <div class="time" @click="changeTime(1)">
+            <div class="time" @click="changeTime(1, '12:00 - 13:00')">
               12:00 - 13:00
             </div>
-            <div class="time" @click="changeTime(2)">
+            <div class="time" @click="changeTime(2, '15:00 - 16:00')">
               15:00 - 16:00
             </div>
           </div>
 
           <div v-else class="time-box">
-            <div class="time active" @click="changeTime(0)">
+            <div class="time active" @click="changeTime(0, '12:00 - 13:00')">
               12:00 - 13:00
             </div>
-            <div class="time" @click="changeTime(1)">
+            <div class="time" @click="changeTime(1, '15:00 - 16:00')">
               15:00 - 16:00
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="itogo">
-        <h1>Итого</h1>
-        <h1>{{ info.summa * info.colvo }},<span>00 ₽</span></h1>
-      </div>
-      <Nuxt-link to="/done" class="button">
-        Заказать воду
-      </Nuxt-link>
+    <div class="itogo">
+      <h1>Итого</h1>
+      <h1>{{ info.summa * info.colvo }},<span>00 ₽</span></h1>
+    </div>
+    <div class="button" @click="checkForm()">
+      Заказать воду
     </div>
   </div>
 </template>
@@ -141,7 +139,7 @@ export default {
         selected: {},
         offset: 0,
         summa: 220,
-        phone: ''
+        selectedTime: '10:00 - 11:00'
       }
     }
   },
@@ -149,6 +147,39 @@ export default {
     this.getDate()
   },
   methods: {
+    checkForm () {
+      let valid = true
+      const obj = { summa: this.info.summa, time: this.info.selectedTime }
+      if (this.info.barel === 0) {
+        obj.barel = '18,9 л'
+      }
+      if (this.info.barel === 1) {
+        obj.barel = '1,5 л'
+      }
+      if (this.info.barel === 2) {
+        obj.barel = '0,5 л'
+      }
+      document.querySelectorAll('input').forEach((e) => {
+        if (e.value === false || e.value === '') {
+          valid = false
+          e.style.borderBottom = '1px solid red'
+        }
+        if (
+          e.placeholder === 'Почта' &&
+          (!e.value.includes('@') || !e.value.includes('.'))
+        ) {
+          valid = false
+        }
+        obj[e.placeholder] = e.value
+      })
+      if (!document.querySelector('#c1').checked) {
+        valid = false
+      }
+      if (valid === true) {
+        window.location = window.location + 'done'
+        localStorage.setItem('form', JSON.stringify(obj))
+      }
+    },
     changeBarel (id) {
       const all = document.querySelectorAll('.circle')
       const colvo = document.querySelectorAll('.colvo')
@@ -171,12 +202,13 @@ export default {
         this.info.summa = 270
       }
     },
-    changeTime (id) {
+    changeTime (id, time) {
       const all = document.querySelectorAll('.time')
       all.forEach((e) => {
         e.classList.remove('active')
       })
       all[id].classList.add('active')
+      this.selectedTime = time
     },
     changeDate (id) {
       this.info.date.forEach((e) => {
@@ -225,34 +257,150 @@ export default {
 </script>
 
 <style>
+@media (min-width: 320px) {
+  .barel {
+    cursor: pointer;
+    position: relative;
+    width: 30%;
+    margin-right: 10px;
+    z-index: 1;
+  }
+
+  .main {
+    cursor: pointer;
+    position: relative;
+    width: 100%;
+    height: 160px;
+    border-radius: 8px;
+    z-index: 1;
+    overflow: hidden;
+    background: white;
+  }
+
+  .circle-den {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: #e5edff;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: 0.3s;
+  }
+
+  .circle-den.active {
+    background: #ffc369;
+  }
+
+  .circle-den h1 {
+    font-size: 14px;
+    margin: 0;
+    padding-top: 10px;
+    margin-bottom: 5px !important;
+    line-height: 0px;
+  }
+
+  .circle-den h3 {
+    margin: 0;
+    margin-top: 2px;
+    font-size: 8px;
+  }
+
+  .time {
+    font-size: 12px;
+    color: #455273;
+    padding: 5px 8px;
+    background: #e5edff;
+    font-weight: 700;
+    border-radius: 30px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+}
+
+@media (min-width: 768px) {
+  .barel {
+    cursor: pointer;
+    position: relative;
+    width: 120px;
+    margin-right: 20px;
+    z-index: 1;
+  }
+
+  .main {
+    cursor: pointer;
+    position: relative;
+    width: 110px;
+    height: 160px;
+    border-radius: 8px;
+    z-index: 1;
+    overflow: hidden;
+    background: white;
+  }
+
+  .circle-den {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: #e5edff;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: 0.3s;
+  }
+
+  .circle-den.active {
+    background: #ffc369;
+  }
+
+  .circle-den h1 {
+    padding-top: 10px;
+    font-size: 20px;
+    margin: 0;
+  }
+
+  .circle-den h3 {
+    margin-top: 5px;
+    font-size: 11px;
+  }
+
+  .time {
+    font-size: 18px;
+    color: #455273;
+    padding: 10px 20px;
+    background: #e5edff;
+    font-weight: 700;
+    border-radius: 30px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+}
+
+.time-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .inner-box {
   user-select: none;
   display: flex;
   align-items: center;
 }
 
-.barel {
-  cursor: pointer;
-  position: relative;
-  width: 120px;
-  margin-right: 20px;
-  z-index: 1;
-}
-
-.main {
-  cursor: pointer;
-  position: relative;
-  width: 110px;
-  height: 160px;
-  border-radius: 8px;
-  z-index: 1;
-  overflow: hidden;
-  background: white;
-}
-
 .barel h1 {
   margin: 12px;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
 }
 
 .barel h3 {
@@ -341,39 +489,7 @@ img.img-barel {
   align-items: center;
 }
 
-.circle-den {
-  width: 50px;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  background: #e5edff;
-  border-radius: 50%;
-  overflow: hidden;
-  cursor: pointer;
-  margin-right: 8px;
-  transition: 0.3s;
-}
-
-.circle-den.active {
-  background: #ffc369;
-}
-
-.circle-den h1 {
-  font-size: 20px;
-  margin: 0;
-  padding-top: 15px;
-  line-height: 10px;
-}
-
-.circle-den h2 {
-  font-size: 11px;
-  margin-top: 6px;
-  line-height: 10px;
-}
-
-h2.vihodnoi {
+h3.vihodnoi {
   color: #fd7562;
 }
 
@@ -381,31 +497,13 @@ h1.active {
   color: white;
 }
 
-h2.active {
+h3.active {
   color: white;
 }
 
 .circle-den img {
   width: 100%;
   height: 100%;
-}
-
-.time-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.time {
-  font-size: 18px;
-  color: #455273;
-  padding: 10px 20px;
-  background: #e5edff;
-  font-weight: 700;
-  border-radius: 30px;
-  margin-right: 10px;
-  cursor: pointer;
-  transition: 0.3s ease;
 }
 
 .time.active {
@@ -443,7 +541,7 @@ h2.active {
   border-radius: 30px;
   cursor: pointer;
   margin-top: 60px;
-  margin-left: 20px;
   display: none;
+  width: fit-content;
 }
 </style>

@@ -1,18 +1,21 @@
 <template>
   <div class="container-fluid">
     <div class="row mobile">
-      <component :is="currentComponent" />
-      <div v-if="currentStep != 2" class="mobile-nav">
-        <div class="but" @click="currentStep++" v-text="curTest[currentStep]" />
-      </div>
-      <div v-else class="mobile-nav">
-        <Nuxt-link to="/done">
+      <div class="form">
+        <component :is="currentComponent" />
+        <div v-if="currentStep == 0" class="mobile-nav">
           <div
             class="but"
             @click="currentStep++"
             v-text="curTest[currentStep]"
           />
-        </Nuxt-link>
+        </div>
+        <div v-if="currentStep == 1" class="mobile-nav">
+          <div class="but" @click="checkForm()" v-text="curTest[currentStep]" />
+        </div>
+        <div v-if="currentStep == 2" class="mobile-nav">
+          <div class="but" @click="submit" v-text="curTest[currentStep]" />
+        </div>
       </div>
     </div>
     <div class="row desktop">
@@ -37,6 +40,9 @@ export default {
       Userinfo,
       Date,
       currentStep: 0,
+      barel: 0,
+      summa: 220,
+      selectedTime: '10:00 - 11:00',
       curTest: ['Заказать воду', 'Далее', 'Заказать воду'],
       steps: [Title, Userinfo, Dates]
     }
@@ -45,12 +51,58 @@ export default {
     currentComponent () {
       return this.steps[this.currentStep]
     }
+  },
+  methods: {
+    submit () {
+      window.location = window.location + 'done'
+    },
+    checkForm () {
+      let valid = true
+      const obj = { summa: this.summa, time: this.selectedTime }
+      if (this.barel === 0) {
+        obj.barel = '18,9 л'
+      }
+      if (this.barel === 1) {
+        obj.barel = '1,5 л'
+      }
+      if (this.barel === 2) {
+        obj.barel = '0,5 л'
+      }
+      const data = document.querySelectorAll('input')
+      data.forEach((e, ind) => {
+        if (ind > 3) {
+          return
+        }
+        if (e.value === false || e.value === '') {
+          valid = false
+          e.style.borderBottom = '1px solid red'
+        }
+        if (
+          e.placeholder === 'Почта' &&
+          (!e.value.includes('@') || !e.value.includes('.'))
+        ) {
+          valid = false
+        }
+        obj[e.placeholder] = e.value
+      })
+      if (!document.querySelector('#c1').checked) {
+        valid = false
+      }
+      console.log(valid)
+      if (valid === true) {
+        localStorage.setItem('form', JSON.stringify(obj))
+        this.currentStep++
+      }
+    }
   }
 }
 </script>
 
 <style>
 @media (min-width: 320px) {
+  body {
+    background: #f5f8ff;
+  }
   .mobile {
     display: flex;
   }
@@ -59,22 +111,22 @@ export default {
     display: none;
   }
 
-  .itogo {
-    margin-left: 20px;
-  }
-
   .button {
     display: none !important;
   }
 
   .left-info {
-    margin-top: 100px;
+    margin-top: 50px;
     height: 100%;
     align-items: center;
   }
 }
 
 @media (min-width: 768px) {
+  body {
+    background: #e9effc;
+  }
+
   .desktop {
     display: flex;
   }
@@ -111,12 +163,7 @@ export default {
   }
 }
 
-.mobile {
-  padding: 20px;
-}
-
 .mobile-nav {
-  margin-top: 100px;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -129,5 +176,6 @@ export default {
   font-size: 20px;
   border-radius: 30px;
   cursor: pointer;
+  margin: 20px 0px;
 }
 </style>

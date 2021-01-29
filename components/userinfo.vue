@@ -4,12 +4,12 @@
     <div class="row form-box">
       <div class="col-lg-6 col-md-12">
         <input placeholder="ФИО" type="text">
-        <input placeholder="Почта" type="text">
+        <input placeholder="Почта" type="email">
       </div>
       <div class="col-lg-6 col-md-12">
         <input
           v-model="info.phone"
-          v-mask="'+# (###) ##-##-##'"
+          v-mask="'+7 (###) ###-##-##'"
           placeholder="Телефон"
           type="text"
         >
@@ -43,21 +43,47 @@ export default {
 </script>
 
 <style>
-.form {
-  width: 100%;
-  background: #f5f8ff;
-  border-radius: 6px;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  padding: 40px;
+@media (min-width: 320px) {
+  .form {
+    width: 100%;
+    background: #f5f8ff;
+    margin: 0;
+    padding: 10px;
+  }
+
+  .form h1 {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #455273;
+    letter-spacing: 1.3px;
+  }
+
+  .check-box label {
+    font-size: 12px !important;
+  }
 }
 
-.form h1 {
-  font-size: 24px;
-  font-weight: 900;
-  color: #455273;
-  letter-spacing: 1.3px;
-  margin-bottom: 40px;
+@media (min-width: 768px) {
+  .form {
+    width: 100%;
+    background: #f5f8ff;
+    border-radius: 6px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 40px;
+  }
+
+  .form h1 {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #455273;
+    letter-spacing: 1.3px;
+    margin-bottom: 40px;
+  }
+
+  .check-box label {
+    font-size: 14px !important;
+  }
 }
 
 .form-box input {
@@ -82,9 +108,5 @@ export default {
 
 .check-box a {
   color: #418de8;
-}
-
-.check-box label {
-  font-size: 12px;
 }
 </style>
