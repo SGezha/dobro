@@ -122,9 +122,9 @@
         <h1>Итого</h1>
         <h1>{{ info.summa * info.colvo }},<span>00 ₽</span></h1>
       </div>
-      <div class="button">
+      <Nuxt-link to="/done" class="button">
         Заказать воду
-      </div>
+      </Nuxt-link>
     </div>
   </div>
 </template>

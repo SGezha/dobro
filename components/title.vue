@@ -23,9 +23,13 @@ export default {
 </script>
 
 <style>
+a:hover {
+  color: white;
+  outline: none;
+}
+
 .left-info {
   width: 100%;
-  height: 100vh !important;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -2,8 +2,17 @@
   <div class="container-fluid">
     <div class="row mobile">
       <component :is="currentComponent" />
-      <div v-if="curTest[currentStep] != undefined" class="mobile-nav">
+      <div v-if="currentStep != 2" class="mobile-nav">
         <div class="but" @click="currentStep++" v-text="curTest[currentStep]" />
+      </div>
+      <div v-else class="mobile-nav">
+        <Nuxt-link to="/done">
+          <div
+            class="but"
+            @click="currentStep++"
+            v-text="curTest[currentStep]"
+          />
+        </Nuxt-link>
       </div>
     </div>
     <div class="row desktop">
@@ -42,11 +51,20 @@ export default {
 
 <style>
 @media (min-width: 320px) {
+  .mobile {
+    display: flex;
+  }
+
   .desktop {
     display: none;
   }
+
   .itogo {
     margin-left: 20px;
+  }
+
+  .button {
+    display: none !important;
   }
 
   .left-info {
@@ -60,17 +78,36 @@ export default {
   .desktop {
     display: flex;
   }
+
   .mobile {
     display: none;
   }
+
   .select-box {
     margin-top: 60px;
   }
+
+  .form {
+    width: 100%;
+    background: #f5f8ff;
+    border-radius: 6px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 40px;
+  }
+
   .button {
     display: block !important;
   }
+
   .left-info {
-      margin: 0 !important;
+    width: 100%;
+    height: 100vh !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 0;
   }
 }
 
