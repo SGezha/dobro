@@ -82,6 +82,7 @@ export default {
           (!e.value.includes('@') || !e.value.includes('.'))
         ) {
           valid = false
+          e.style.borderBottom = '1px solid red'
         }
         obj[e.placeholder] = e.value
       })
